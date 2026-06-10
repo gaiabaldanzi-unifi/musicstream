@@ -1,0 +1,27 @@
+# Virtual environment
+venv/
+venv2/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Django
+*.log
+local_settings.py
+staticfiles/
+media/
+
+# Database (teniamo db.sqlite3 per la consegna, ma escludiamo backup)
+*.sqlite3.bak
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp

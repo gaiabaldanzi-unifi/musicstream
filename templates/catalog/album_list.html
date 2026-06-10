@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Album — MusicStream{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-light">Album</h2>
+    {% if user.is_curator %}
+        <a href="{% url 'catalog:album_create' %}" class="btn btn-gradient">+ Nuovo album</a>
+    {% endif %}
+</div>
+
+<form class="no-ts row g-2 mb-4" method="get">
+    <div class="col">
+        <input type="text" name="q" class="form-control" placeholder="Cerca album o artista..." value="{{ query|default:'' }}">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-gradient">Cerca</button>
+    </div>
+</form>
+
+<div class="row row-cols-2 row-cols-md-4 g-3">
+    {% for album in albums %}
+    <div class="col">
+        <div class="card song-card h-100 p-3">
+            {% if album.cover %}
+                <img src="{{ album.cover.url }}" class="rounded mb-2" style="height:140px;object-fit:cover;width:100%;">
+            {% else %}
+                <div class="cover-placeholder rounded mb-2 d-flex align-items-center justify-content-center" style="height:140px;font-size:36px;"><i class="bi bi-disc-fill" style="color:#fff;font-size:inherit;"></i></div>
+            {% endif %}
+            <h6 class="mb-0 text-light">{{ album.name }}</h6>
+            {% if album.artist %}<small class="text-accent">{{ album.artist }}</small>{% endif %}
+            <small class="text-secondary">{{ album.songs.count }} canzoni</small>
+            <a href="{% url 'catalog:album_detail' album.pk %}" class="stretched-link"></a>
+        </div>
+    </div>
+    {% empty %}
+        <p class="text-secondary col-12">Nessun album ancora.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}Cerca — MusicStream{% endblock %}
+{% block content %}
+
+<h2 class="text-light mb-4">Cerca</h2>
+
+<form class="no-ts mb-4" method="get" action="{% url 'catalog:search' %}">
+    <div class="row g-2">
+        <div class="col-md-7">
+            <input type="text" name="q" class="form-control form-control-lg"
+                   placeholder="Cerca canzoni, artisti, album, generi..." value="{{ query }}">
+        </div>
+        <div class="col-md-3">
+            <select name="cat" class="form-select form-select-lg">
+                <option value="all"     {% if category == 'all'     %}selected{% endif %}>Tutto</option>
+                <option value="songs"   {% if category == 'songs'   %}selected{% endif %}>Canzoni</option>
+                <option value="artists" {% if category == 'artists' %}selected{% endif %}>Artisti</option>
+                <option value="albums"  {% if category == 'albums'  %}selected{% endif %}>Album</option>
+                <option value="genres"  {% if category == 'genres'  %}selected{% endif %}>Generi</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-gradient w-100" style="height:100%;">Cerca</button>
+        </div>
+    </div>
+</form>
+
+{% if query %}
+
+    {% if songs %}
+    <h5 class="text-light mt-4 mb-3"><i class="bi bi-soundwave"></i> Canzoni <span class="badge badge-genre ms-1">{{ songs|length }}</span></h5>
+    <div class="list-group mb-4">
+        {% for song in songs %}
+        <a href="{% url 'catalog:song_detail' song.pk %}" class="list-group-item d-flex justify-content-between align-items-center text-decoration-none">
+            <div>
+                <span class="fw-bold text-light">{{ song.title }}</span>
+                <span class="text-accent ms-2">— {{ song.artist }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                {% if song.genre %}<span class="badge badge-genre">{{ song.genre }}</span>{% endif %}
+                <span class="text-secondary small">{{ song.duration_display }}</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if artists %}
+    <h5 class="text-light mt-4 mb-3"><i class="bi bi-person-fill"></i> Artisti <span class="badge badge-genre ms-1">{{ artists|length }}</span></h5>
+    <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+        {% for artist in artists %}
+        <div class="col">
+            <a href="{% url 'catalog:artist_detail' artist.pk %}" class="text-decoration-none">
+                <div class="card p-3 text-center song-card">
+                    {% if artist.photo %}
+                        <img src="{{ artist.photo.url }}" class="rounded-circle mx-auto mb-2" style="width:60px;height:60px;object-fit:cover;">
+                    {% else %}
+                        <div class="cover-placeholder rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width:60px;height:60px;font-size:24px;"><i class="bi bi-person-fill" style="color:#fff;font-size:inherit;"></i></div>
+                    {% endif %}
+                    <small class="fw-bold text-light">{{ artist.name }}</small>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if albums %}
+    <h5 class="text-light mt-4 mb-3"><i class="bi bi-disc-fill"></i> Album <span class="badge badge-genre ms-1">{{ albums|length }}</span></h5>
+    <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+        {% for album in albums %}
+        <div class="col">
+            <a href="{% url 'catalog:album_detail' album.pk %}" class="text-decoration-none">
+                <div class="card p-3 song-card">
+                    <small class="fw-bold text-light">{{ album.name }}</small>
+                    {% if album.artist %}<small class="text-accent d-block">{{ album.artist }}</small>{% endif %}
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if genres %}
+    <h5 class="text-light mt-4 mb-3"><i class="bi bi-music-note-list"></i> Generi <span class="badge badge-genre ms-1">{{ genres|length }}</span></h5>
+    <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+        {% for genre in genres %}
+        <div class="col">
+            <a href="{% url 'catalog:genre_detail' genre.pk %}" class="text-decoration-none">
+                <div class="card p-3 text-center song-card">
+                    <small class="fw-bold text-light">{{ genre.name }}</small>
+                    <small class="text-secondary">{{ genre.songs.count }} canzoni</small>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if not songs and not artists and not albums and not genres %}
+        <p class="text-secondary mt-4">Nessun risultato per "<strong class="text-light">{{ query }}</strong>".</p>
+    {% endif %}
+
+{% endif %}
+
+{% endblock %}

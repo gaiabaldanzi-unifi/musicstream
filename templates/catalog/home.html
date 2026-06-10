@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block title %}MusicStream{% endblock %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+    <form class="mb-5 no-ts" method="get" action="{% url 'catalog:search' %}">
+        <div class="row g-2 justify-content-center">
+            <div class="col-md-7">
+                <input type="text" name="q" class="form-control form-control-lg"
+                       placeholder="Cerca canzoni, artisti, album, generi...">
+            </div>
+            <div class="col-md-3">
+                <select name="cat" class="form-select form-select-lg">
+                    <option value="all">Tutto</option>
+                    <option value="songs">Canzoni</option>
+                    <option value="artists">Artisti</option>
+                    <option value="albums">Album</option>
+                    <option value="genres">Generi</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-gradient w-100" style="height:100%;">Cerca</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="mb-3">
+        <h5 class="text-light">Aggiunte di recente</h5>
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-3 g-3">
+        {% for song in songs %}
+        <div class="col">
+            <div class="card song-card h-100 p-3">
+                {% if song.cover %}
+                    <img src="{{ song.cover.url }}" class="rounded mb-2" style="height:160px;object-fit:cover;width:100%;">
+                {% else %}
+                    <div class="cover-placeholder rounded mb-2 d-flex align-items-center justify-content-center" style="height:160px;font-size:40px;"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+                {% endif %}
+                <h6 class="mb-0 text-light">{{ song.title }}</h6>
+                <small><a href="{% url 'catalog:artist_detail' song.artist.pk %}" class="text-accent text-decoration-none">{{ song.artist }}</a></small>
+                {% if song.genre %}
+                    <span class="badge badge-genre mt-1" style="width:fit-content;">{{ song.genre }}</span>
+                {% endif %}
+                <a href="{% url 'catalog:song_detail' song.pk %}" class="stretched-link"></a>
+            </div>
+        </div>
+        {% empty %}
+            <p class="text-secondary">Nessuna canzone ancora.
+                {% if user.is_curator %}
+                    <a href="{% url 'catalog:song_create' %}">Aggiungine una!</a>
+                {% endif %}
+            </p>
+        {% endfor %}
+    </div>
+
+{% else %}
+
+    <div class="text-center py-5 mb-5">
+        <h1 class="fw-bold gradient-title mb-3" style="font-size:3rem;"><i class="bi bi-music-note-beamed"></i> MusicStream</h1>
+        <p class="text-secondary fs-5 mb-4">Scopri musica, crea playlist e molto altro.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'accounts:login' %}" class="btn btn-gradient px-4 py-2">Accedi</a>
+            <a href="{% url 'accounts:register' %}" class="btn btn-outline-accent px-4 py-2">Registrati</a>
+        </div>
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-4 g-4">
+
+        <div class="col">
+            <a href="{% url 'accounts:login' %}?next={% url 'catalog:song_list' %}" class="text-decoration-none">
+                <div class="card song-card h-100 p-4 text-center">
+                    <div style="font-size:3rem;" class="mb-3"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+                    <h4 class="text-light">Canzoni</h4>
+                    <p class="text-secondary mb-0">Sfoglia tutto il catalogo musicale, cerca per titolo o artista.</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col">
+            <a href="{% url 'accounts:login' %}?next={% url 'catalog:artist_list' %}" class="text-decoration-none">
+                <div class="card song-card h-100 p-4 text-center">
+                    <div style="font-size:3rem;" class="mb-3"><i class="bi bi-person-fill" style="color:#fff;font-size:inherit;"></i></div>
+                    <h4 class="text-light">Artisti</h4>
+                    <p class="text-secondary mb-0">Scopri i tuoi artisti preferiti e tutta la loro discografia.</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col">
+            <a href="{% url 'accounts:login' %}?next={% url 'catalog:album_list' %}" class="text-decoration-none">
+                <div class="card song-card h-100 p-4 text-center">
+                    <div style="font-size:3rem;" class="mb-3"><i class="bi bi-disc-fill" style="color:#fff;font-size:inherit;"></i></div>
+                    <h4 class="text-light">Album</h4>
+                    <p class="text-secondary mb-0">Esplora la musica per album e scopri tutte le tracce.</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col">
+            <a href="{% url 'accounts:login' %}?next={% url 'catalog:genre_list' %}" class="text-decoration-none">
+                <div class="card song-card h-100 p-4 text-center">
+                    <div style="font-size:3rem;" class="mb-3"><i class="bi bi-music-note-list" style="color:#fff;"></i></div>
+                    <h4 class="text-light">Generi</h4>
+                    <p class="text-secondary mb-0">Dalla pop all'elettronica, trova la musica che fa per te.</p>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+{% endif %}
+
+{% endblock %}

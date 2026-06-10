@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Generi — MusicStream{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-light">Generi</h2>
+    {% if user.is_curator %}
+        <a href="{% url 'catalog:genre_create' %}" class="btn btn-gradient">+ Nuovo genere</a>
+    {% endif %}
+</div>
+
+<form class="no-ts row g-2 mb-4" method="get">
+    <div class="col">
+        <input type="text" name="q" class="form-control" placeholder="Cerca genere..." value="{{ query|default:'' }}">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-gradient">Cerca</button>
+    </div>
+</form>
+
+<div class="row row-cols-2 row-cols-md-4 g-3">
+    {% for genre in genres %}
+    <div class="col">
+        <a href="{% url 'catalog:genre_detail' genre.pk %}" class="text-decoration-none">
+            <div class="card song-card h-100 p-4 text-center">
+                <h5 class="text-light mb-1">{{ genre.name }}</h5>
+                <small class="text-secondary">{{ genre.songs.count }} canzoni</small>
+                {% if genre.description %}
+                    <p class="text-accent small mt-2 mb-0">{{ genre.description }}</p>
+                {% endif %}
+            </div>
+        </a>
+    </div>
+    {% empty %}
+        <p class="text-secondary col-12">Nessun genere ancora.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

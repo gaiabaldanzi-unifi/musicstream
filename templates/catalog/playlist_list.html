@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Le mie Playlist — MusicStream{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-light">Le mie Playlist</h2>
+    <a href="{% url 'catalog:playlist_create' %}" class="btn btn-gradient">+ Nuova playlist</a>
+</div>
+
+<form class="no-ts row g-2 mb-4" method="get">
+    <div class="col">
+        <input type="text" name="q" class="form-control" placeholder="Cerca playlist..." value="{{ query|default:'' }}">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-gradient">Cerca</button>
+    </div>
+</form>
+
+<div class="row row-cols-1 row-cols-md-3 g-3">
+    {% for playlist in playlists %}
+    <div class="col">
+        <div class="card h-100 position-relative song-card overflow-hidden" style="cursor:pointer;">
+            {% if playlist.cover %}
+                <img src="{{ playlist.cover.url }}" style="width:100%;height:120px;object-fit:cover;">
+            {% else %}
+                <div class="cover-placeholder d-flex align-items-center justify-content-center" style="height:120px;font-size:36px;">
+                    <i class="bi bi-music-note-list" style="color:#fff;font-size:inherit;"></i>
+                </div>
+            {% endif %}
+            <div class="p-3">
+                <h5 class="text-light mb-1">{{ playlist.name }}</h5>
+                <small class="text-secondary">{{ playlist.songs.count }} canzon{% if playlist.songs.count == 1 %}e{% else %}i{% endif %} · {{ playlist.total_duration }} min.</small>
+            </div>
+            <a href="{% url 'catalog:playlist_detail' playlist.pk %}" class="stretched-link"></a>
+        </div>
+    </div>
+    {% empty %}
+        <p class="text-secondary col-12">Non hai ancora playlist. <a href="{% url 'catalog:playlist_create' %}">Creane una!</a></p>
+    {% endfor %}
+</div>
+{% endblock %}

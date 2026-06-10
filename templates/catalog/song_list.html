@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Canzoni — MusicStream{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-light">Canzoni</h2>
+    {% if user.is_curator %}
+        <a href="{% url 'catalog:song_create' %}" class="btn btn-gradient">+ Aggiungi canzone</a>
+    {% endif %}
+</div>
+
+<form class="no-ts row g-2 mb-4" method="get">
+    <div class="col">
+        <input type="text" name="q" class="form-control"
+               placeholder="Cerca titolo o artista..." value="{{ query|default:'' }}">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-gradient">Cerca</button>
+    </div>
+</form>
+
+<div class="row row-cols-2 row-cols-md-4 g-3">
+    {% for song in songs %}
+    <div class="col">
+        <div class="card song-card h-100 p-3">
+            {% if song.cover %}
+                <img src="{{ song.cover.url }}" class="rounded mb-2" style="height:140px;object-fit:cover;width:100%;">
+            {% else %}
+                <div class="cover-placeholder rounded mb-2 d-flex align-items-center justify-content-center" style="height:140px;font-size:36px;"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+            {% endif %}
+            <h6 class="mb-0 text-light">{{ song.title }}</h6>
+            <small><a href="{% url 'catalog:artist_detail' song.artist.pk %}" class="text-accent text-decoration-none">{{ song.artist }}</a></small>
+            {% if song.genre %}<span class="badge badge-genre mt-1" style="width:fit-content;">{{ song.genre }}</span>{% endif %}
+            <a href="{% url 'catalog:song_detail' song.pk %}" class="stretched-link"></a>
+        </div>
+    </div>
+    {% empty %}
+        <p class="text-secondary col-12">Nessuna canzone trovata.</p>
+    {% endfor %}
+</div>
+{% endblock %}

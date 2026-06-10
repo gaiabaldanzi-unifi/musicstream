@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block title %}{{ playlist.name }} — MusicStream{% endblock %}
+{% block content %}
+
+<div class="row mb-4 align-items-center">
+    <div class="col-auto">
+        {% if playlist.cover %}
+            <img src="{{ playlist.cover.url }}" class="rounded" style="width:140px;height:140px;object-fit:cover;border:2px solid rgba(139,92,246,0.5);">
+        {% else %}
+            <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:140px;height:140px;font-size:48px;">
+                <i class="bi bi-music-note-list" style="color:#fff;font-size:inherit;"></i>
+            </div>
+        {% endif %}
+    </div>
+    <div class="col">
+        <p class="text-secondary mb-1 small">PLAYLIST</p>
+        <h2 class="fw-bold text-light mb-1">{{ playlist.name }}</h2>
+        {% if playlist.description %}
+            <p class="text-secondary mb-1">{{ playlist.description }}</p>
+        {% endif %}
+        <p class="text-secondary small mb-0">
+            {{ playlist.songs.count }} canzon{% if playlist.songs.count == 1 %}e{% else %}i{% endif %}
+            · {{ playlist.total_duration }} min.
+        </p>
+    </div>
+    <div class="col-auto d-flex gap-2 align-self-start">
+        {% if request.GET.modifica %}
+            <a href="{% url 'catalog:playlist_detail' playlist.pk %}" class="btn btn-gradient btn-sm">✓ Fatto</a>
+        {% else %}
+            <a href="?modifica=1" class="btn btn-outline-accent btn-sm">Modifica</a>
+        {% endif %}
+        <a href="{% url 'catalog:playlist_list' %}" class="btn btn-outline-secondary btn-sm">← Torna alle playlist</a>
+    </div>
+</div>
+
+{% if request.GET.modifica %}
+
+    <div class="card p-3 mb-4">
+        <h6 class="text-secondary mb-3">Modifica playlist</h6>
+        <form method="post" action="{% url 'catalog:playlist_update' playlist.pk %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label text-secondary small">Nome</label>
+                <input type="text" name="name" class="form-control" value="{{ playlist.name }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-secondary small">Descrizione</label>
+                <textarea name="description" class="form-control" rows="2">{{ playlist.description }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label text-secondary small">Cover</label>
+                <input type="file" name="cover" class="form-control" accept="image/*">
+                {% if playlist.cover %}
+                    <small class="text-secondary">Cover attuale: <img src="{{ playlist.cover.url }}" style="height:32px;border-radius:4px;vertical-align:middle;margin-left:6px;"></small>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-gradient">Salva modifiche</button>
+        </form>
+    </div>
+
+    <h5 class="mb-3 text-light">Canzoni nella playlist</h5>
+    <div class="list-group mb-4">
+        {% for song in playlist.songs.all %}
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                {% if song.cover %}
+                    <img src="{{ song.cover.url }}" class="rounded" style="width:40px;height:40px;object-fit:cover;">
+                {% else %}
+                    <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:40px;height:40px;font-size:18px;"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+                {% endif %}
+                <div>
+                    <strong class="text-light">{{ song.title }}</strong>
+                    <span class="text-accent ms-1">— {{ song.artist }}</span>
+                    <small class="text-secondary ms-2">{{ song.duration_display }}</small>
+                </div>
+            </div>
+            <a href="{% url 'catalog:playlist_remove_song' playlist.pk song.pk %}?next={% url 'catalog:playlist_detail' playlist.pk %}%3Fmodifica%3D1"
+               class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Rimuovi</a>
+        </div>
+        {% empty %}
+            <p class="text-secondary p-2">Nessuna canzone ancora.</p>
+        {% endfor %}
+    </div>
+
+
+{% else %}
+
+    <div class="list-group mb-4">
+        {% for song in playlist.songs.all %}
+        <a href="{% url 'catalog:song_detail' song.pk %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center text-decoration-none">
+            <div class="d-flex align-items-center gap-3">
+                {% if song.cover %}
+                    <img src="{{ song.cover.url }}" class="rounded" style="width:48px;height:48px;object-fit:cover;">
+                {% else %}
+                    <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:48px;height:48px;font-size:22px;"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+                {% endif %}
+                <div>
+                    <div class="fw-bold text-light">{{ song.title }}</div>
+                    <div class="text-accent small">{{ song.artist }}</div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                {% if song.genre %}<span class="badge badge-genre">{{ song.genre }}</span>{% endif %}
+                <span class="text-secondary small">{{ song.duration_display }}</span>
+            </div>
+        </a>
+        {% empty %}
+            <p class="text-secondary p-2">Nessuna canzone ancora.</p>
+        {% endfor %}
+    </div>
+
+{% endif %}
+
+{% if available_songs %}
+<h5 class="mb-3 text-light">Aggiungi canzoni</h5>
+<div class="row row-cols-2 row-cols-md-3 g-2">
+    {% for song in available_songs %}
+    <div class="col">
+        <div class="card p-2 song-card h-100">
+            <small class="fw-bold text-light">{{ song.title }}</small>
+            <small class="text-accent">{{ song.artist }}</small>
+            <small class="text-secondary">{{ song.duration_display }}</small>
+            <a href="{% url 'catalog:playlist_add_song' playlist.pk song.pk %}?next={{ request.path }}"
+               class="btn btn-gradient btn-sm mt-2">+ Aggiungi</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
