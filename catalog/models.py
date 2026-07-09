@@ -17,13 +17,21 @@ COVER_GRADIENTS = [
 def gradient_for(pk):
     return COVER_GRADIENTS[(pk or 0) % len(COVER_GRADIENTS)]
 
+GENRE_COLORS = {
+    'Pop':         'linear-gradient(135deg,#be185d,#ec4899,#f9a8d4)',
+    'Rock':        'linear-gradient(135deg,#dc2626,#f97316,#f59e0b)',
+    'Hip-Hop':     'linear-gradient(135deg,#6d28d9,#8b5cf6,#a855f7)',
+    'Elettronica': 'linear-gradient(135deg,#2563eb,#06b6d4,#22d3ee)',
+    'Indie':       'linear-gradient(135deg,#15803d,#22c55e,#84cc16)',
+}
+
 class Genre(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
 
     @property
     def cover_gradient(self):
-        return gradient_for(self.pk)
+        return GENRE_COLORS.get(self.name, gradient_for(self.pk))
 
     def __str__(self):
         return self.name
