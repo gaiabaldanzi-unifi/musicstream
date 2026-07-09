@@ -4,14 +4,16 @@
 
 {% if user.is_authenticated %}
 
+    <h2 class="text-light mb-4">Cerca</h2>
+
     <form class="mb-5 no-ts" method="get" action="{% url 'catalog:search' %}">
-        <div class="row g-2 justify-content-center">
-            <div class="col-md-7">
-                <input type="text" name="q" class="form-control form-control-lg"
+        <div class="row g-2">
+            <div class="col">
+                <input type="text" name="q" class="form-control"
                        placeholder="Cerca canzoni, artisti, album, generi...">
             </div>
-            <div class="col-md-3">
-                <select name="cat" class="form-select form-select-lg">
+            <div class="col-auto" style="width:200px;">
+                <select name="cat" class="form-select">
                     <option value="all">Tutto</option>
                     <option value="songs">Canzoni</option>
                     <option value="artists">Artisti</option>
@@ -19,8 +21,8 @@
                     <option value="genres">Generi</option>
                 </select>
             </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-gradient w-100" style="height:100%;">Cerca</button>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-gradient">Cerca</button>
             </div>
         </div>
     </form>
@@ -36,7 +38,7 @@
                 {% if song.cover %}
                     <img src="{{ song.cover.url }}" class="rounded mb-2" style="height:160px;object-fit:cover;width:100%;">
                 {% else %}
-                    <div class="cover-placeholder rounded mb-2 d-flex align-items-center justify-content-center" style="height:160px;font-size:40px;"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+                    <div class="cover-placeholder rounded mb-2 d-flex align-items-center justify-content-center" style="height:160px;font-size:40px;background:{{ song.cover_gradient }};"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
                 {% endif %}
                 <h6 class="mb-0 text-light">{{ song.title }}</h6>
                 <small><a href="{% url 'catalog:artist_detail' song.artist.pk %}" class="text-accent text-decoration-none">{{ song.artist }}</a></small>
@@ -70,45 +72,53 @@
 
         <div class="col">
             <a href="{% url 'accounts:login' %}?next={% url 'catalog:song_list' %}" class="text-decoration-none">
-                <div class="card song-card h-100 p-4 text-center">
-                    <div style="font-size:3rem;" class="mb-3"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
-                    <h4 class="text-light">Canzoni</h4>
-                    <p class="text-secondary mb-0">Sfoglia tutto il catalogo musicale, cerca per titolo o artista.</p>
+                <div class="home-card h-100 p-4 text-center" style="background:linear-gradient(135deg,#0e7490,#06b6d4);">
+                    <div style="font-size:3rem;" class="mb-2"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+                    <h4 class="text-white mb-0">Canzoni</h4>
                 </div>
             </a>
         </div>
 
         <div class="col">
             <a href="{% url 'accounts:login' %}?next={% url 'catalog:artist_list' %}" class="text-decoration-none">
-                <div class="card song-card h-100 p-4 text-center">
-                    <div style="font-size:3rem;" class="mb-3"><i class="bi bi-person-fill" style="color:#fff;font-size:inherit;"></i></div>
-                    <h4 class="text-light">Artisti</h4>
-                    <p class="text-secondary mb-0">Scopri i tuoi artisti preferiti e tutta la loro discografia.</p>
+                <div class="home-card h-100 p-4 text-center" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">
+                    <div style="font-size:3rem;" class="mb-2"><i class="bi bi-person-fill" style="color:#fff;font-size:inherit;"></i></div>
+                    <h4 class="text-white mb-0">Artisti</h4>
                 </div>
             </a>
         </div>
 
         <div class="col">
             <a href="{% url 'accounts:login' %}?next={% url 'catalog:album_list' %}" class="text-decoration-none">
-                <div class="card song-card h-100 p-4 text-center">
-                    <div style="font-size:3rem;" class="mb-3"><i class="bi bi-disc-fill" style="color:#fff;font-size:inherit;"></i></div>
-                    <h4 class="text-light">Album</h4>
-                    <p class="text-secondary mb-0">Esplora la musica per album e scopri tutte le tracce.</p>
+                <div class="home-card h-100 p-4 text-center" style="background:linear-gradient(135deg,#be185d,#ec4899);">
+                    <div style="font-size:3rem;" class="mb-2"><i class="bi bi-disc-fill" style="color:#fff;font-size:inherit;"></i></div>
+                    <h4 class="text-white mb-0">Album</h4>
                 </div>
             </a>
         </div>
 
         <div class="col">
             <a href="{% url 'accounts:login' %}?next={% url 'catalog:genre_list' %}" class="text-decoration-none">
-                <div class="card song-card h-100 p-4 text-center">
-                    <div style="font-size:3rem;" class="mb-3"><i class="bi bi-music-note-list" style="color:#fff;"></i></div>
-                    <h4 class="text-light">Generi</h4>
-                    <p class="text-secondary mb-0">Dalla pop all'elettronica, trova la musica che fa per te.</p>
+                <div class="home-card h-100 p-4 text-center" style="background:linear-gradient(135deg,#65a30d,#a3e635);">
+                    <div style="font-size:3rem;" class="mb-2"><i class="bi bi-music-note-list" style="color:#fff;"></i></div>
+                    <h4 class="text-white mb-0">Generi</h4>
                 </div>
             </a>
         </div>
 
     </div>
+
+    <style>
+        .home-card {
+            border-radius: 14px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .home-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.35);
+        }
+    </style>
 
 {% endif %}
 

@@ -22,7 +22,7 @@
             {% if playlist.cover %}
                 <img src="{{ playlist.cover.url }}" style="width:100%;height:120px;object-fit:cover;">
             {% else %}
-                <div class="cover-placeholder d-flex align-items-center justify-content-center" style="height:120px;font-size:36px;">
+                <div class="cover-placeholder d-flex align-items-center justify-content-center" style="height:120px;font-size:36px;background:{{ playlist.cover_gradient }};">
                     <i class="bi bi-music-note-list" style="color:#fff;font-size:inherit;"></i>
                 </div>
             {% endif %}

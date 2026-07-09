@@ -290,3 +290,13 @@ def playlist_update(request, pk):
     else:
         form = PlaylistForm(instance=playlist)
     return render(request, 'catalog/playlist_form.html', {'form': form, 'playlist': playlist})
+
+@login_required
+def playlist_delete(request, pk):
+    playlist = get_object_or_404(Playlist, pk=pk, owner=request.user)
+    if request.method == 'POST':
+        nome = playlist.name
+        playlist.delete()
+        messages.success(request, f'Playlist "{nome}" eliminata.')
+        return redirect('catalog:playlist_list')
+    return redirect('catalog:playlist_detail', pk=pk)

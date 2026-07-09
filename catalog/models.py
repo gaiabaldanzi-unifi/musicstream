@@ -1,6 +1,22 @@
 from django.db import models
 from accounts.models import CustomUser
 
+COVER_GRADIENTS = [
+    'linear-gradient(135deg,#06b6d4,#8b5cf6)',
+    'linear-gradient(135deg,#ec4899,#f59e0b)',
+    'linear-gradient(135deg,#10b981,#06b6d4)',
+    'linear-gradient(135deg,#f43f5e,#8b5cf6)',
+    'linear-gradient(135deg,#0ea5e9,#22d3ee)',
+    'linear-gradient(135deg,#a3e635,#10b981)',
+    'linear-gradient(135deg,#f59e0b,#f43f5e)',
+    'linear-gradient(135deg,#8b5cf6,#ec4899)',
+    'linear-gradient(135deg,#e879f9,#22d3ee)',
+    'linear-gradient(135deg,#fb7185,#fbbf24)',
+]
+
+def gradient_for(pk):
+    return COVER_GRADIENTS[(pk or 0) % len(COVER_GRADIENTS)]
+
 class Genre(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
@@ -12,6 +28,10 @@ class Artist(models.Model):
     name = models.CharField(max_length=200)
     bio = models.TextField(blank=True)
     photo = models.ImageField(upload_to='artists/', blank=True, null=True)
+
+    @property
+    def cover_gradient(self):
+        return gradient_for(self.pk)
 
     def __str__(self):
         return self.name
@@ -25,6 +45,10 @@ class Album(models.Model):
         related_name='albums'
     )
     cover = models.ImageField(upload_to='album_covers/', blank=True, null=True)
+
+    @property
+    def cover_gradient(self):
+        return gradient_for(self.pk)
 
     def __str__(self):
         return self.name
@@ -45,6 +69,7 @@ class Song(models.Model):
     )
     genre = models.ForeignKey(Genre, on_delete=models.SET_NULL, null=True, related_name='songs')
     duration = models.PositiveIntegerField(help_text='Durata in secondi')
+    lyrics = models.TextField(blank=True)
     cover = models.ImageField(upload_to='covers/', blank=True, null=True)
     added_by = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='added_songs')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -54,6 +79,10 @@ class Song(models.Model):
         minutes = self.duration // 60
         seconds = self.duration % 60
         return f'{minutes}:{seconds:02d}'
+
+    @property
+    def cover_gradient(self):
+        return gradient_for(self.pk)
 
     def __str__(self):
         return f'{self.title} — {self.artist}'
@@ -72,6 +101,10 @@ class Playlist(models.Model):
         minutes = total // 60
         seconds = total % 60
         return f'{minutes}:{seconds:02d}'
+
+    @property
+    def cover_gradient(self):
+        return gradient_for(self.pk)
 
     def __str__(self):
         return f'{self.name} ({self.owner.username})'

@@ -24,7 +24,7 @@
             {% if song.cover %}
                 <img src="{{ song.cover.url }}" class="rounded" style="width:48px;height:48px;object-fit:cover;">
             {% else %}
-                <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:48px;height:48px;font-size:22px;"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+                <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:48px;height:48px;font-size:22px;background:{{ song.cover_gradient }};"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
             {% endif %}
             <div>
                 <div class="fw-bold text-light">{{ song.title }}</div>

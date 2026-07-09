@@ -41,7 +41,9 @@ class AlbumForm(forms.ModelForm):
 class SongForm(forms.ModelForm):
     class Meta:
         model = Song
-        fields = ('title', 'artist', 'album', 'genre', 'duration', 'cover')
+        fields = ('title', 'artist', 'album', 'genre', 'duration', 'lyrics', 'cover')
+        labels = {'lyrics': 'Testo'}
+        widgets = {'lyrics': forms.Textarea(attrs={'rows': 8})}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -7,7 +7,7 @@
         {% if artist.photo %}
             <img src="{{ artist.photo.url }}" class="rounded-circle" style="width:120px;height:120px;object-fit:cover;border:3px solid #8b5cf6;">
         {% else %}
-            <div class="cover-placeholder rounded-circle d-flex align-items-center justify-content-center" style="width:120px;height:120px;font-size:48px;"><i class="bi bi-person-fill" style="color:#fff;font-size:inherit;"></i></div>
+            <div class="cover-placeholder rounded-circle d-flex align-items-center justify-content-center" style="width:120px;height:120px;font-size:48px;background:{{ artist.cover_gradient }};"><i class="bi bi-person-fill" style="color:#fff;font-size:inherit;"></i></div>
         {% endif %}
     </div>
     <div class="col d-flex flex-column justify-content-center">
@@ -31,7 +31,7 @@
                 {% if album.cover %}
                     <img src="{{ album.cover.url }}" class="rounded mb-2" style="height:100px;object-fit:cover;width:100%;">
                 {% else %}
-                    <div class="cover-placeholder rounded mb-2 d-flex align-items-center justify-content-center" style="height:100px;font-size:28px;"><i class="bi bi-disc-fill" style="color:#fff;font-size:inherit;"></i></div>
+                    <div class="cover-placeholder rounded mb-2 d-flex align-items-center justify-content-center" style="height:100px;font-size:28px;background:{{ album.cover_gradient }};"><i class="bi bi-disc-fill" style="color:#fff;font-size:inherit;"></i></div>
                 {% endif %}
                 <small class="fw-bold text-light">{{ album.name }}</small>
             </div>
@@ -49,7 +49,7 @@
             {% if song.cover %}
                 <img src="{{ song.cover.url }}" class="rounded" style="width:48px;height:48px;object-fit:cover;">
             {% else %}
-                <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:48px;height:48px;font-size:22px;"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+                <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:48px;height:48px;font-size:22px;background:{{ song.cover_gradient }};"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
             {% endif %}
             <div>
                 <div class="fw-bold text-light">{{ song.title }}</div>

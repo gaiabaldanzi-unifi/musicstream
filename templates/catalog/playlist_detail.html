@@ -7,7 +7,7 @@
         {% if playlist.cover %}
             <img src="{{ playlist.cover.url }}" class="rounded" style="width:140px;height:140px;object-fit:cover;border:2px solid rgba(139,92,246,0.5);">
         {% else %}
-            <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:140px;height:140px;font-size:48px;">
+            <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:140px;height:140px;font-size:48px;background:{{ playlist.cover_gradient }};">
                 <i class="bi bi-music-note-list" style="color:#fff;font-size:inherit;"></i>
             </div>
         {% endif %}
@@ -56,6 +56,14 @@
             </div>
             <button type="submit" class="btn btn-gradient">Salva modifiche</button>
         </form>
+        <hr style="border-color: var(--border-color);">
+        <form method="post" action="{% url 'catalog:playlist_delete' playlist.pk %}"
+              onsubmit="return confirm('Eliminare definitivamente la playlist «{{ playlist.name }}»?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-trash"></i> Elimina playlist
+            </button>
+        </form>
     </div>
 
     <h5 class="mb-3 text-light">Canzoni nella playlist</h5>
@@ -66,7 +74,7 @@
                 {% if song.cover %}
                     <img src="{{ song.cover.url }}" class="rounded" style="width:40px;height:40px;object-fit:cover;">
                 {% else %}
-                    <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:40px;height:40px;font-size:18px;"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+                    <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:40px;height:40px;font-size:18px;background:{{ song.cover_gradient }};"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
                 {% endif %}
                 <div>
                     <strong class="text-light">{{ song.title }}</strong>
@@ -92,7 +100,7 @@
                 {% if song.cover %}
                     <img src="{{ song.cover.url }}" class="rounded" style="width:48px;height:48px;object-fit:cover;">
                 {% else %}
-                    <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:48px;height:48px;font-size:22px;"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+                    <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:48px;height:48px;font-size:22px;background:{{ song.cover_gradient }};"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
                 {% endif %}
                 <div>
                     <div class="fw-bold text-light">{{ song.title }}</div>

@@ -67,7 +67,7 @@ curator = CustomUser.objects.create_user(
 )
 admin = CustomUser.objects.create_superuser(
     username='admin_demo', password='admin12345',
-    email='admin@demo.com',
+    email='admin@demo.com', role='curator',
 )
 
 print("Creazione canzoni...")
@@ -102,11 +102,24 @@ songs_data = [
     ("Mr. Brightside",                           killers,  hot_fuss,         indie,       222),
 ]
 
+LYRICS_PLACEHOLDER = """Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+sed do eiusmod tempor incididunt ut labore et dolore.
+
+Ut enim ad minim veniam, quis nostrud exercitation,
+ullamco laboris nisi ut aliquip ex ea commodo.
+
+Duis aute irure dolor in reprehenderit in voluptate,
+velit esse cillum dolore eu fugiat nulla pariatur.
+
+Excepteur sint occaecat cupidatat non proident,
+sunt in culpa qui officia deserunt mollit anim."""
+
 songs = []
 for title, artist, album, genre, duration in songs_data:
     song = Song.objects.create(
         title=title, artist=artist, album=album,
         genre=genre, duration=duration, added_by=curator,
+        lyrics=LYRICS_PLACEHOLDER,
     )
     songs.append(song)
 

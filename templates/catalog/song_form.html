@@ -58,6 +58,12 @@
                 </div>
 
                 <div class="mb-3">
+                    <label class="form-label">{{ form.lyrics.label }} <small class="text-secondary">(opzionale)</small></label>
+                    {{ form.lyrics }}
+                    {% if form.lyrics.errors %}<div class="text-danger small">{{ form.lyrics.errors }}</div>{% endif %}
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label">{{ form.cover.label }}</label>
                     {{ form.cover }}
                     {% if form.cover.errors %}<div class="text-danger small">{{ form.cover.errors }}</div>{% endif %}
