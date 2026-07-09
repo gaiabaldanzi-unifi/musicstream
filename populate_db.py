@@ -1,4 +1,5 @@
 import os
+import random
 import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'musicstream.settings')
@@ -113,6 +114,9 @@ velit esse cillum dolore eu fugiat nulla pariatur.
 
 Excepteur sint occaecat cupidatat non proident,
 sunt in culpa qui officia deserunt mollit anim."""
+
+random.seed(7)
+random.shuffle(songs_data)
 
 songs = []
 for title, artist, album, genre, duration in songs_data:

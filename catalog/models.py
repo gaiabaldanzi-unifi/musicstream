@@ -21,6 +21,10 @@ class Genre(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
 
+    @property
+    def cover_gradient(self):
+        return gradient_for(self.pk)
+
     def __str__(self):
         return self.name
 
@@ -82,6 +86,8 @@ class Song(models.Model):
 
     @property
     def cover_gradient(self):
+        if self.genre:
+            return self.genre.cover_gradient
         return gradient_for(self.pk)
 
     def __str__(self):

@@ -7,7 +7,7 @@ from .models import Genre, Song, Playlist, Album, Artist
 from .forms import SongForm, PlaylistForm, AlbumForm, GenreForm, ArtistForm
 
 def home(request):
-    songs = Song.objects.order_by('-created_at')[:6]
+    songs = Song.objects.order_by('-created_at')[:12]
     genres = Genre.objects.all()
     return render(request, 'catalog/home.html', {
         'songs': songs,
