@@ -9,8 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
     <style>
         :root {
-            --accent-start: #8b5cf6;   /* viola */
-            --accent-end:   #ec4899;   /* rosa */
+            --accent-start: #8b5cf6;
+            --accent-end:   #ec4899;
             --bg-main:      #0d0d1f;
             --bg-card:      #13132b;
             --bg-nav:       #09091a;
@@ -21,14 +21,12 @@
 
         body { background-color: var(--bg-main); color: var(--text-primary); }
 
-        /* ---- Navbar (utenti non loggati) ---- */
         .navbar { background-color: var(--bg-nav) !important; border-bottom: 1px solid var(--border-color); }
         .navbar-brand { background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
                         -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-link { color: var(--text-secondary) !important; }
         .nav-link:hover { color: var(--text-primary) !important; }
 
-        /* ---- Barra laterale (utenti loggati) ---- */
         .app-shell { display: flex; min-height: 100vh; align-items: stretch; }
         .sidebar {
             width: 230px; flex-shrink: 0;
@@ -88,7 +86,6 @@
             .app-main { padding: 24px 18px; }
         }
 
-        /* ---- Card ---- */
         .card {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -104,7 +101,6 @@
             box-shadow: 0 0 20px rgba(236, 72, 153, 0.4), 0 8px 25px rgba(139, 92, 246, 0.3) !important;
         }
 
-        /* ---- List group ---- */
         .list-group-item {
             background-color: var(--bg-card) !important;
             border-color: var(--border-color) !important;
@@ -115,11 +111,9 @@
             color: var(--text-primary) !important;
         }
 
-        /* ---- Testi colorati ---- */
         .text-accent  { color: var(--text-secondary) !important; }
         .text-secondary { color: #7c86c9 !important; }
 
-        /* ---- Bottone gradiente principale ---- */
         .btn-gradient {
             background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
             color: #fff !important;
@@ -134,7 +128,6 @@
             box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
         }
 
-        /* ---- Bottone outline ---- */
         .btn-outline-accent {
             color: var(--accent-start);
             border-color: var(--accent-start);
@@ -145,7 +138,6 @@
             color: #fff;
         }
 
-        /* ---- Badge genere ---- */
         .badge-genre {
             background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
             color: #fff;
@@ -154,7 +146,6 @@
             border-radius: 20px;
         }
 
-        /* ---- Bottone "già aggiunta" ---- */
         .btn-already {
             background-color: #1e1b4b;
             color: var(--text-secondary);
@@ -163,12 +154,10 @@
             cursor: default;
         }
 
-        /* ---- Copertina placeholder ---- */
         .cover-placeholder {
             background: linear-gradient(135deg, #7c3aed, #ec4899);
         }
 
-        /* ---- Form ---- */
         .form-control, .form-select {
             background-color: #1a1a35;
             border-color: rgba(255, 255, 255, 0.15);
@@ -183,7 +172,6 @@
         .form-control::placeholder { color: #5a6080; }
         label { color: var(--text-secondary); }
 
-        /* ---- Tom Select (dropdown ricercabile) ---- */
         .ts-wrapper .ts-control {
             background-color: #1a1a35 !important;
             border-color: var(--border-color) !important;
@@ -207,17 +195,14 @@
         .ts-wrapper .ts-control input { color: var(--text-primary) !important; }
         .ts-wrapper .ts-control input::placeholder { color: #5a6080 !important; }
 
-        /* ---- Link ---- */
         a { color: var(--accent-start); }
         a:hover { color: var(--accent-end); }
 
-        /* ---- Alert ---- */
         .alert-success { background-color: #1e1b4b; border-color: #8b5cf6; color: #c4b5fd; }
         .alert-error, .alert-danger { background-color: #2d0d0d; border-color: #7f1d1d; color: #fca5a5; }
         .alert-info { background-color: #0c1a2e; border-color: #1e3a5f; color: #93c5fd; }
         .alert-warning { background-color: #2d1f00; border-color: #78350f; color: #fcd34d; }
 
-        /* ---- Titolo hero ---- */
         .gradient-title {
             background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
             -webkit-background-clip: text;

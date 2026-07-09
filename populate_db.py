@@ -73,7 +73,6 @@ admin = CustomUser.objects.create_superuser(
 
 print("Creazione canzoni...")
 songs_data = [
-    # title, artist, album, genre, duration_sec
     ("Blinding Lights",                          weeknd,   after_hours,      pop,         200),
     ("Save Your Tears",                          weeknd,   after_hours,      pop,         215),
     ("In Your Eyes",                             weeknd,   after_hours,      pop,         238),
