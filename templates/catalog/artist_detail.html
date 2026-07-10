@@ -16,7 +16,15 @@
         <p class="text-secondary small mt-1">{{ songs.count }} canzon{% if songs.count == 1 %}e{% else %}i{% endif %} · {{ albums.count }} album</p>
         {% if artist.bio %}<p class="text-accent mt-1">{{ artist.bio }}</p>{% endif %}
     </div>
-    <div class="col-auto d-flex align-items-center">
+    <div class="col-auto d-flex align-items-center gap-2">
+        {% if user.is_curator %}
+            <a href="{% url 'catalog:artist_update' artist.pk %}" class="btn btn-outline-accent btn-sm">Modifica</a>
+            <form method="post" action="{% url 'catalog:artist_delete' artist.pk %}" class="d-inline"
+                  onsubmit="return confirm('Eliminare «{{ artist.name }}» e tutte le sue canzoni? L’operazione non è reversibile.');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Elimina</button>
+            </form>
+        {% endif %}
         <a href="{% url 'catalog:artist_list' %}" class="btn btn-outline-secondary btn-sm">← Tutti gli artisti</a>
     </div>
 </div>

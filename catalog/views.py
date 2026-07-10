@@ -99,6 +99,36 @@ def artist_create(request):
         form = ArtistForm()
     return render(request, 'catalog/artist_form.html', {'form': form})
 
+@login_required
+def artist_update(request, pk):
+    artist = get_object_or_404(Artist, pk=pk)
+    if not request.user.is_curator():
+        messages.error(request, 'Solo i Curator possono modificare artisti.')
+        return redirect('catalog:artist_detail', pk=pk)
+    if request.method == 'POST':
+        form = ArtistForm(request.POST, request.FILES, instance=artist)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Artista modificato!')
+            return redirect('catalog:artist_detail', pk=artist.pk)
+    else:
+        form = ArtistForm(instance=artist)
+    return render(request, 'catalog/artist_form.html', {'form': form, 'title': 'Modifica artista'})
+
+@login_required
+def artist_delete(request, pk):
+    artist = get_object_or_404(Artist, pk=pk)
+    if not request.user.is_curator():
+        messages.error(request, 'Solo i Curator possono eliminare artisti.')
+        return redirect('catalog:artist_detail', pk=pk)
+    if request.method == 'POST':
+        nome = artist.name
+        artist.songs.all().delete()
+        artist.delete()
+        messages.success(request, f'Artista "{nome}" e le sue canzoni eliminati.')
+        return redirect('catalog:artist_list')
+    return redirect('catalog:artist_detail', pk=pk)
+
 def genre_list(request):
     query = request.GET.get('q', '').strip()
     genres = Genre.objects.all().order_by('name')
@@ -131,6 +161,22 @@ def genre_create(request):
     else:
         form = GenreForm()
     return render(request, 'catalog/genre_form.html', {'form': form})
+
+@login_required
+def genre_update(request, pk):
+    genre = get_object_or_404(Genre, pk=pk)
+    if not request.user.is_curator():
+        messages.error(request, 'Solo i Curator possono modificare generi.')
+        return redirect('catalog:genre_detail', pk=pk)
+    if request.method == 'POST':
+        form = GenreForm(request.POST, instance=genre)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Genere modificato!')
+            return redirect('catalog:genre_detail', pk=genre.pk)
+    else:
+        form = GenreForm(instance=genre)
+    return render(request, 'catalog/genre_form.html', {'form': form, 'title': 'Modifica genere'})
 
 def album_list(request):
     query = request.GET.get('q', '').strip()
@@ -165,6 +211,36 @@ def album_create(request):
         form = AlbumForm()
     return render(request, 'catalog/album_form.html', {'form': form})
 
+@login_required
+def album_update(request, pk):
+    album = get_object_or_404(Album, pk=pk)
+    if not request.user.is_curator():
+        messages.error(request, 'Solo i Curator possono modificare album.')
+        return redirect('catalog:album_detail', pk=pk)
+    if request.method == 'POST':
+        form = AlbumForm(request.POST, request.FILES, instance=album)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Album modificato!')
+            return redirect('catalog:album_detail', pk=album.pk)
+    else:
+        form = AlbumForm(instance=album)
+    return render(request, 'catalog/album_form.html', {'form': form, 'album': album, 'title': 'Modifica album'})
+
+@login_required
+def album_delete(request, pk):
+    album = get_object_or_404(Album, pk=pk)
+    if not request.user.is_curator():
+        messages.error(request, 'Solo i Curator possono eliminare album.')
+        return redirect('catalog:album_detail', pk=pk)
+    if request.method == 'POST':
+        nome = album.name
+        album.songs.all().delete()
+        album.delete()
+        messages.success(request, f'Album "{nome}" e le sue canzoni eliminati.')
+        return redirect('catalog:album_list')
+    return redirect('catalog:album_detail', pk=pk)
+
 def song_detail(request, pk):
     song = get_object_or_404(Song, pk=pk)
     user_playlists = []
@@ -174,9 +250,18 @@ def song_detail(request, pk):
                 'playlist': pl,
                 'has_song': pl.songs.filter(pk=song.pk).exists(),
             })
+    filtro_simili = Q()
+    if song.genre:
+        filtro_simili |= Q(genre=song.genre)
+    if song.artist:
+        filtro_simili |= Q(artist=song.artist)
+    similar_songs = []
+    if filtro_simili:
+        similar_songs = Song.objects.filter(filtro_simili).exclude(pk=song.pk).distinct()[:4]
     return render(request, 'catalog/song_detail.html', {
         'song': song,
         'user_playlists': user_playlists,
+        'similar_songs': similar_songs,
     })
 
 @login_required
@@ -194,7 +279,9 @@ def song_create(request):
             return redirect('catalog:song_detail', pk=song.pk)
     else:
         form = SongForm()
-    return render(request, 'catalog/song_form.html', {'form': form, 'title': 'Aggiungi canzone'})
+    return render(request, 'catalog/song_form.html', {
+        'form': form, 'title': 'Aggiungi canzone', 'albums': Album.objects.all(),
+    })
 
 @login_required
 def song_update(request, pk):
@@ -210,7 +297,9 @@ def song_update(request, pk):
             return redirect('catalog:song_detail', pk=song.pk)
     else:
         form = SongForm(instance=song)
-    return render(request, 'catalog/song_form.html', {'form': form, 'title': 'Modifica canzone'})
+    return render(request, 'catalog/song_form.html', {
+        'form': form, 'title': 'Modifica canzone', 'albums': Album.objects.all(),
+    })
 
 @login_required
 def song_delete(request, pk):
@@ -235,7 +324,14 @@ def playlist_list(request):
 @login_required
 def playlist_detail(request, pk):
     playlist = get_object_or_404(Playlist, pk=pk, owner=request.user)
-    songs = Song.objects.exclude(playlists=playlist)[:6]
+    generi = playlist.songs.values_list('genre', flat=True)
+    artisti = playlist.songs.values_list('artist', flat=True)
+    if generi or artisti:
+        songs = Song.objects.filter(
+            Q(genre__in=generi) | Q(artist__in=artisti)
+        ).exclude(playlists=playlist).distinct()[:4]
+    else:
+        songs = Song.objects.exclude(playlists=playlist)[:4]
     return render(request, 'catalog/playlist_detail.html', {
         'playlist': playlist,
         'available_songs': songs,

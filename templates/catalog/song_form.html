@@ -5,7 +5,7 @@
     <div class="col-md-6">
         <div class="card p-4">
             <h2 class="mb-4 text-light">{{ title }}</h2>
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
 
                 <div class="mb-3">
@@ -34,7 +34,16 @@
                             ➕ Crea nuovo album
                         </a>
                     </div>
-                    {{ form.album }}
+                    <select name="album" id="id_album" class="form-select no-ts-select">
+                        <option value="">— Nessun album —</option>
+                        {% for album in albums %}
+                            <option value="{{ album.pk }}" data-artist="{{ album.artist_id|default:'' }}"
+                                {% if form.album.value|stringformat:'s' == album.pk|stringformat:'s' %}selected{% endif %}>
+                                {{ album.name }}{% if album.artist %} — {{ album.artist }}{% endif %}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <div class="form-text text-secondary small">Vengono mostrati solo gli album dell'artista selezionato.</div>
                     {% if form.album.errors %}<div class="text-danger small">{{ form.album.errors }}</div>{% endif %}
                 </div>
 
@@ -75,4 +84,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function () {
+        var artist = document.getElementById('id_artist');
+        var album = document.getElementById('id_album');
+        if (!artist || !album) return;
+
+        function filtraAlbum() {
+            var artistaSelezionato = artist.value;
+            Array.from(album.options).forEach(function (opt) {
+                if (!opt.value) return;
+                var appartiene = (opt.dataset.artist === artistaSelezionato);
+                opt.hidden = !appartiene;
+                if (!appartiene && opt.selected) {
+                    album.value = '';
+                }
+            });
+        }
+
+        artist.addEventListener('change', filtraAlbum);
+        filtraAlbum();
+    })();
+</script>
 {% endblock %}

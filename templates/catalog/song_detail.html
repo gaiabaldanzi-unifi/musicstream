@@ -54,4 +54,24 @@
     <p class="text-secondary mb-0" style="white-space: pre-line; line-height: 1.8;">{{ song.lyrics }}</p>
 </div>
 {% endif %}
+
+{% if similar_songs %}
+<h5 class="text-light mt-5 mb-3">Canzoni consigliate</h5>
+<div class="row row-cols-2 row-cols-md-4 g-3">
+    {% for s in similar_songs %}
+    <div class="col">
+        <div class="card song-card h-100 p-3">
+            {% if s.cover %}
+                <img src="{{ s.cover.url }}" class="rounded mb-2" style="height:120px;object-fit:cover;width:100%;">
+            {% else %}
+                <div class="cover-placeholder rounded mb-2 d-flex align-items-center justify-content-center" style="height:120px;font-size:32px;background:{{ s.cover_gradient }};"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+            {% endif %}
+            <small class="fw-bold text-light">{{ s.title }}</small>
+            <small class="text-accent">{{ s.artist }}</small>
+            <a href="{% url 'catalog:song_detail' s.pk %}" class="stretched-link"></a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

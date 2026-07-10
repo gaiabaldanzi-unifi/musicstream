@@ -55,6 +55,18 @@ class SongForm(forms.ModelForm):
         self.fields['artist'].empty_label = '— Seleziona artista —'
         self.fields['album'].empty_label = '— Nessun album —'
         self.fields['genre'].empty_label = '— Seleziona genere —'
+        self.fields['duration'].error_messages = {
+            'required': 'Questo campo è obbligatorio e deve contenere solo numeri tra 1 e 3600 (secondi).',
+            'invalid': 'Questo campo è obbligatorio e deve contenere solo numeri tra 1 e 3600 (secondi).',
+        }
+
+    def clean_duration(self):
+        duration = self.cleaned_data.get('duration')
+        if duration is not None and (duration < 1 or duration > 3600):
+            raise forms.ValidationError(
+                'Questo campo è obbligatorio e deve contenere solo numeri tra 1 e 3600 (secondi).'
+            )
+        return duration
 
 class PlaylistForm(forms.ModelForm):
     class Meta:

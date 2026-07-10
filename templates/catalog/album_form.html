@@ -4,8 +4,8 @@
 <div class="row justify-content-center">
     <div class="col-md-5">
         <div class="card p-4">
-            <h2 class="mb-4 text-light">Aggiungi album</h2>
-            <form method="post" enctype="multipart/form-data">
+            <h2 class="mb-4 text-light">{{ title|default:"Aggiungi album" }}</h2>
+            <form method="post" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 <div class="mb-3">
                     <label class="form-label">{{ form.name.label }}</label>
@@ -29,7 +29,7 @@
                     {{ form.cover }}
                     {% if form.cover.errors %}<div class="text-danger small">{{ form.cover.errors }}</div>{% endif %}
                 </div>
-                <button type="submit" class="btn btn-gradient w-100">Crea album</button>
+                <button type="submit" class="btn btn-gradient w-100">Salva</button>
                 <a href="{% url 'catalog:album_list' %}" class="btn btn-outline-secondary w-100 mt-2">Annulla</a>
             </form>
         </div>

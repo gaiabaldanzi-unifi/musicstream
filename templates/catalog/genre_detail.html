@@ -11,7 +11,12 @@
         {% endif %}
         <p class="text-secondary small mt-1">{{ songs.count }} canzon{% if songs.count == 1 %}e{% else %}i{% endif %}</p>
     </div>
-    <a href="{% url 'catalog:genre_list' %}" class="btn btn-outline-secondary btn-sm">← Tutti i generi</a>
+    <div class="d-flex gap-2">
+        {% if user.is_curator %}
+            <a href="{% url 'catalog:genre_update' genre.pk %}" class="btn btn-outline-accent btn-sm">Modifica</a>
+        {% endif %}
+        <a href="{% url 'catalog:genre_list' %}" class="btn btn-outline-secondary btn-sm">← Tutti i generi</a>
+    </div>
 </div>
 
 <div class="list-group">

@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Nuovo Artista — MusicStream{% endblock %}
+{% block title %}{{ title|default:"Nuovo Artista" }} — MusicStream{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-5">
         <div class="card p-4">
-            <h2 class="mb-4 text-light">Aggiungi artista</h2>
-            <form method="post" enctype="multipart/form-data">
+            <h2 class="mb-4 text-light">{{ title|default:"Aggiungi artista" }}</h2>
+            <form method="post" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="mb-3">
@@ -16,7 +16,7 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-                <button type="submit" class="btn btn-gradient w-100">Crea artista</button>
+                <button type="submit" class="btn btn-gradient w-100">Salva</button>
                 <a href="{% url 'catalog:artist_list' %}" class="btn btn-outline-secondary w-100 mt-2">Annulla</a>
             </form>
         </div>

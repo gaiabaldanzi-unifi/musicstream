@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Nuovo Genere — MusicStream{% endblock %}
+{% block title %}{{ title|default:"Nuovo Genere" }} — MusicStream{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-5">
         <div class="card p-4">
-            <h2 class="mb-4 text-light">Aggiungi genere</h2>
-            <form method="post">
+            <h2 class="mb-4 text-light">{{ title|default:"Aggiungi genere" }}</h2>
+            <form method="post" novalidate>
                 {% csrf_token %}
                 {% for field in form %}
                     <div class="mb-3">
@@ -16,7 +16,7 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-                <button type="submit" class="btn btn-gradient w-100">Crea genere</button>
+                <button type="submit" class="btn btn-gradient w-100">Salva</button>
                 <a href="{% url 'catalog:genre_list' %}" class="btn btn-outline-secondary w-100 mt-2">Annulla</a>
             </form>
         </div>
