@@ -61,3 +61,25 @@ Quando un utente tenta un'azione per cui non ha i permessi (ad esempio raggiunge
 1. Accedere come `curator_demo` (Curator): aprire una canzone per vederne i dettagli e il testo, aggiungere una nuova canzone (dal pulsante "Aggiungi canzone") e creare una playlist.
 2. Fare logout e accedere come `user_demo` (Listener): il pulsante "Aggiungi canzone" non è più visibile, perché il Listener non ha quel permesso.
 3. Da Listener, raggiungere direttamente l'indirizzo di una pagina riservata, ad esempio `http://127.0.0.1:8000/canzoni/aggiungi/` (in locale) oppure `https://musicstream-iuvd.onrender.com/canzoni/aggiungi/` (online): l'applicazione reindirizza alla lista delle canzoni e mostra il messaggio "Solo i Curator possono aggiungere canzoni".
+
+## Tecnologie
+
+- Python 3.9 / Django 4.2
+- Database SQLite (`db.sqlite3`, incluso e pre-popolato)
+- Bootstrap 5 + Bootstrap Icons
+- Tom Select (menu a tendina ricercabili)
+- Gunicorn + WhiteNoise (esecuzione e file statici in produzione)
+
+## Struttura del progetto
+
+```
+musicstream/
+    accounts/         app per utenti, autenticazione e profili
+    catalog/          app per canzoni, artisti, album, generi, playlist
+    templates/        template HTML
+    media/            file caricati dagli utenti (cover, avatar)
+    db.sqlite3        database SQLite pre-popolato
+    requirements.txt  dipendenze Python
+    build.sh          script di build per il deploy
+    manage.py         strumento di gestione di Django
+```
