@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-md-3 text-center">
         {% if song.cover %}
-            <img src="{{ song.cover.url }}" class="img-fluid rounded shadow-glow" style="max-height:250px;object-fit:cover;">
+            <img src="{{ song.cover.url }}" class="img-fluid rounded" style="max-height:250px;object-fit:cover;">
         {% else %}
             <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="height:250px;font-size:80px;background:{{ song.cover_gradient }};"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
         {% endif %}
@@ -13,7 +13,7 @@
         <h1 class="fw-bold text-light">{{ song.title }}</h1>
         <h4><a href="{% url 'catalog:artist_detail' song.artist.pk %}" class="text-decoration-none text-accent">{{ song.artist }}</a></h4>
         {% if song.album %}<p class="text-light">Album: <a href="{% url 'catalog:album_detail' song.album.pk %}" class="fw-bold text-decoration-none" style="color:var(--accent-start);">{{ song.album }}</a></p>{% endif %}
-        {% if song.genre %}<p>Genere: <a href="{% url 'catalog:genre_detail' song.genre.pk %}" class="text-decoration-none"><span class="badge badge-genre">{{ song.genre }}</span></a></p>{% endif %}
+        {% if song.genre %}<p class="text-light">Genere: <a href="{% url 'catalog:genre_detail' song.genre.pk %}" class="text-decoration-none"><span class="genre-word" style="background-image:{{ song.genre.cover_gradient }};font-size:1rem;">{{ song.genre }}</span></a></p>{% endif %}
         <p class="text-light">Durata: <strong>{{ song.duration_display }} min.</strong></p>
 
         {% if user.is_curator %}

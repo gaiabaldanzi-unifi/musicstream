@@ -29,7 +29,7 @@
             {% endif %}
             <h6 class="mb-0 text-light">{{ song.title }}</h6>
             <small><a href="{% url 'catalog:artist_detail' song.artist.pk %}" class="text-accent text-decoration-none">{{ song.artist }}</a></small>
-            {% if song.genre %}<span class="badge badge-genre mt-1" style="width:fit-content;">{{ song.genre }}</span>{% endif %}
+            {% if song.genre %}<span class="genre-word mt-auto pt-1" style="background-image:{{ song.genre.cover_gradient }};">{{ song.genre }}</span>{% endif %}
             <a href="{% url 'catalog:song_detail' song.pk %}" class="stretched-link"></a>
         </div>
     </div>

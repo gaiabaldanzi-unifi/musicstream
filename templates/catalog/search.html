@@ -6,12 +6,12 @@
 
 <form class="no-ts mb-4" method="get" action="{% url 'catalog:search' %}">
     <div class="row g-2">
-        <div class="col-md-7">
-            <input type="text" name="q" class="form-control form-control-lg"
+        <div class="col">
+            <input type="text" name="q" class="form-control"
                    placeholder="Cerca canzoni, artisti, album, generi..." value="{{ query }}">
         </div>
-        <div class="col-md-3">
-            <select name="cat" class="form-select form-select-lg">
+        <div class="col-auto" style="width:200px;">
+            <select name="cat" class="form-select">
                 <option value="all"     {% if category == 'all'     %}selected{% endif %}>Tutto</option>
                 <option value="songs"   {% if category == 'songs'   %}selected{% endif %}>Canzoni</option>
                 <option value="artists" {% if category == 'artists' %}selected{% endif %}>Artisti</option>
@@ -19,8 +19,8 @@
                 <option value="genres"  {% if category == 'genres'  %}selected{% endif %}>Generi</option>
             </select>
         </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-gradient w-100" style="height:100%;">Cerca</button>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-gradient">Cerca</button>
         </div>
     </div>
 </form>
@@ -37,7 +37,7 @@
                 <span class="text-accent ms-2">— {{ song.artist }}</span>
             </div>
             <div class="d-flex align-items-center gap-2">
-                {% if song.genre %}<span class="badge badge-genre">{{ song.genre }}</span>{% endif %}
+                {% if song.genre %}<span class="genre-word" style="background-image:{{ song.genre.cover_gradient }};">{{ song.genre }}</span>{% endif %}
                 <span class="text-secondary small">{{ song.duration_display }}</span>
             </div>
         </a>
