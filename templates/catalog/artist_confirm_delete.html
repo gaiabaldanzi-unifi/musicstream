@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Elimina artista — MusicStream{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card p-4 text-center">
+            <h2 class="mb-3"><i class="bi bi-trash"></i> Elimina artista</h2>
+            <p>Sei sicura di voler eliminare <strong>{{ artist.name }}</strong> e tutte le sue canzoni?</p>
+            <p class="text-danger small">Questa azione non può essere annullata.</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger w-100 mb-2">Sì, elimina</button>
+                <a href="{% url 'catalog:artist_detail' artist.pk %}" class="btn btn-outline-secondary w-100">Annulla</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

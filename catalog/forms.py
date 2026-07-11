@@ -68,6 +68,18 @@ class SongForm(forms.ModelForm):
             )
         return duration
 
+    def clean(self):
+        cleaned_data = super().clean()
+        artist = cleaned_data.get('artist')
+        album = cleaned_data.get('album')
+        if album and artist and album.artist != artist:
+            self.add_error(
+                'album',
+                f'L\'album "{album.name}" appartiene a {album.artist}, non a {artist}. '
+                f'Scegli un album di {artist} o lascia il campo vuoto.'
+            )
+        return cleaned_data
+
 class PlaylistForm(forms.ModelForm):
     class Meta:
         model = Playlist

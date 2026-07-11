@@ -57,13 +57,9 @@
             <button type="submit" class="btn btn-gradient">Salva modifiche</button>
         </form>
         <hr style="border-color: var(--border-color);">
-        <form method="post" action="{% url 'catalog:playlist_delete' playlist.pk %}"
-              onsubmit="return confirm('Eliminare definitivamente la playlist «{{ playlist.name }}»?');">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-danger btn-sm">
-                <i class="bi bi-trash"></i> Elimina playlist
-            </button>
-        </form>
+        <a href="{% url 'catalog:playlist_delete' playlist.pk %}" class="btn btn-outline-danger btn-sm">
+            <i class="bi bi-trash"></i> Elimina playlist
+        </a>
     </div>
 
     <h5 class="mb-3 text-light">Canzoni nella playlist</h5>

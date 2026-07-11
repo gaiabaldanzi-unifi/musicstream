@@ -127,7 +127,7 @@ def artist_delete(request, pk):
         artist.delete()
         messages.success(request, f'Artista "{nome}" e le sue canzoni eliminati.')
         return redirect('catalog:artist_list')
-    return redirect('catalog:artist_detail', pk=pk)
+    return render(request, 'catalog/artist_confirm_delete.html', {'artist': artist})
 
 def genre_list(request):
     query = request.GET.get('q', '').strip()
@@ -239,7 +239,7 @@ def album_delete(request, pk):
         album.delete()
         messages.success(request, f'Album "{nome}" e le sue canzoni eliminati.')
         return redirect('catalog:album_list')
-    return redirect('catalog:album_detail', pk=pk)
+    return render(request, 'catalog/album_confirm_delete.html', {'album': album})
 
 def song_detail(request, pk):
     song = get_object_or_404(Song, pk=pk)
@@ -395,4 +395,4 @@ def playlist_delete(request, pk):
         playlist.delete()
         messages.success(request, f'Playlist "{nome}" eliminata.')
         return redirect('catalog:playlist_list')
-    return redirect('catalog:playlist_detail', pk=pk)
+    return render(request, 'catalog/playlist_confirm_delete.html', {'playlist': playlist})
