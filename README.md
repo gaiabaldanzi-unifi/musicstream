@@ -1,6 +1,6 @@
 # MusicStream
 
-Servizio di streaming musicale — Full-Stack Web Application sviluppata con Django 4.2.
+Servizio di streaming musicale, Full-Stack Web Application sviluppata con Django 4.2.
 Progetto d'esame per il corso di Progettazione e Produzione Multimediale di **Gaia Baldanzi** (matricola 7115020, A.A. 2025/2026).
 
 **Sito online:** https://musicstream-iuvd.onrender.com
