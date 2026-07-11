@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import Genre, Song, Playlist, Album, Artist
 from .forms import SongForm, PlaylistForm, AlbumForm, GenreForm, ArtistForm
 
@@ -64,22 +64,33 @@ def search(request):
         'genres': genres,
     })
 
-def artist_list(request):
-    query = request.GET.get('q', '').strip()
-    artists = Artist.objects.all().order_by('name')
-    if query:
-        artists = artists.filter(name__icontains=query)
-    return render(request, 'catalog/artist_list.html', {'artists': artists, 'query': query})
+class ArtistListView(ListView):
+    model = Artist
+    template_name = 'catalog/artist_list.html'
+    context_object_name = 'artists'
 
-def artist_detail(request, pk):
-    artist = get_object_or_404(Artist, pk=pk)
-    songs = artist.songs.order_by('title')
-    albums = artist.albums.all()
-    return render(request, 'catalog/artist_detail.html', {
-        'artist': artist,
-        'songs': songs,
-        'albums': albums,
-    })
+    def get_queryset(self):
+        artists = Artist.objects.all().order_by('name')
+        query = self.request.GET.get('q', '').strip()
+        if query:
+            artists = artists.filter(name__icontains=query)
+        return artists
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q', '')
+        return context
+
+class ArtistDetailView(DetailView):
+    model = Artist
+    template_name = 'catalog/artist_detail.html'
+    context_object_name = 'artist'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['songs'] = self.object.songs.order_by('title')
+        context['albums'] = self.object.albums.all()
+        return context
 
 @login_required
 def artist_create(request):
