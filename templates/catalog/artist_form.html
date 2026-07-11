@@ -17,7 +17,7 @@
                     </div>
                 {% endfor %}
                 <button type="submit" class="btn btn-gradient w-100">Salva</button>
-                <a href="{% url 'catalog:artist_list' %}" class="btn btn-outline-secondary w-100 mt-2">Annulla</a>
+                <a href="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'catalog:artist_list' %}{% endif %}" class="btn btn-outline-secondary w-100 mt-2">Annulla</a>
             </form>
         </div>
     </div>

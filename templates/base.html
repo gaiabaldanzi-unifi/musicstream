@@ -59,8 +59,6 @@
         .sidebar-link:hover { background: rgba(255,255,255,0.06); color: var(--text-primary); }
         .sidebar-link.active { background: rgba(255,255,255,0.10); color: #fff; }
         .sidebar-actions { margin-top: auto; display: flex; flex-direction: column; gap: 4px; }
-        .link-aggiungi { color: #a78bfa; }
-        .link-aggiungi:hover { color: #c4b5fd; background: rgba(139,92,246,0.14); }
         .link-gestione { color: #f472b6; }
         .link-gestione:hover { color: #f9a8d4; background: rgba(236,72,153,0.14); }
         .sidebar-bottom { border-top: 1px solid var(--border-color); padding-top: 8px; margin-top: 8px; }
@@ -226,9 +224,6 @@
         <div class="sidebar-header">
             <a class="sidebar-brand" href="{% url 'catalog:home' %}"><i class="bi bi-music-note-beamed"></i> MusicStream</a>
             <div class="sidebar-icons">
-                {% if user.is_curator %}
-                <a class="sidebar-icon" href="{% url 'catalog:song_create' %}" title="Aggiungi canzone" style="color:#a78bfa;"><i class="bi bi-plus-circle"></i></a>
-                {% endif %}
                 {% if user.is_superuser %}
                 <a class="sidebar-icon" href="/admin/" title="Gestione" style="color:#f472b6;"><i class="bi bi-gear"></i></a>
                 {% endif %}
@@ -245,14 +240,11 @@
             <a class="sidebar-link {% if request.resolver_match.url_name == 'genre_list' %}active{% endif %}" href="{% url 'catalog:genre_list' %}"><i class="bi bi-music-note-list"></i> Generi</a>
             <a class="sidebar-link {% if request.resolver_match.url_name == 'playlist_list' %}active{% endif %}" href="{% url 'catalog:playlist_list' %}"><i class="bi bi-collection-play"></i> Playlist</a>
 
+            {% if user.is_superuser %}
             <div class="sidebar-actions">
-                {% if user.is_curator %}
-                <a class="sidebar-link link-aggiungi {% if request.resolver_match.url_name == 'song_create' %}active{% endif %}" href="{% url 'catalog:song_create' %}"><i class="bi bi-plus-circle"></i> Aggiungi</a>
-                {% endif %}
-                {% if user.is_superuser %}
                 <a class="sidebar-link link-gestione" href="/admin/"><i class="bi bi-gear"></i> Gestione</a>
-                {% endif %}
             </div>
+            {% endif %}
         </div>
 
         <div class="sidebar-bottom">

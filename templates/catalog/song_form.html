@@ -19,7 +19,7 @@
                         <label class="form-label mb-0">{{ form.artist.label }}</label>
                         {% if user.is_curator %}
                         <a href="{% url 'catalog:artist_create' %}?next={{ request.path }}" class="small" style="color:var(--accent-start);">
-                            ➕ Crea nuovo artista
+                            ➕ Aggiungi artista
                         </a>
                         {% endif %}
                     </div>
@@ -31,7 +31,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <label class="form-label mb-0">{{ form.album.label }}</label>
                         <a href="{% url 'catalog:album_create' %}?next={{ request.path }}" class="small" style="color:var(--accent-start);">
-                            ➕ Crea nuovo album
+                            ➕ Aggiungi album
                         </a>
                     </div>
                     <select name="album" id="id_album" class="form-select no-ts-select">
@@ -51,7 +51,7 @@
                         <label class="form-label mb-0">{{ form.genre.label }}</label>
                         {% if user.is_curator %}
                         <a href="{% url 'catalog:genre_create' %}?next={{ request.path }}" class="small" style="color:var(--accent-start);">
-                            ➕ Crea nuovo genere
+                            ➕ Aggiungi genere
                         </a>
                         {% endif %}
                     </div>

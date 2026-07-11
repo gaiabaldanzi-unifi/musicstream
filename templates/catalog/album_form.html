@@ -17,7 +17,7 @@
                         <label class="form-label mb-0">{{ form.artist.label }}</label>
                         {% if user.is_curator %}
                         <a href="{% url 'catalog:artist_create' %}?next={{ request.path }}" class="small" style="color:var(--accent-start);">
-                            ➕ Crea nuovo artista
+                            ➕ Aggiungi artista
                         </a>
                         {% endif %}
                     </div>
@@ -30,7 +30,7 @@
                     {% if form.cover.errors %}<div class="text-danger small">{{ form.cover.errors }}</div>{% endif %}
                 </div>
                 <button type="submit" class="btn btn-gradient w-100">Salva</button>
-                <a href="{% url 'catalog:album_list' %}" class="btn btn-outline-secondary w-100 mt-2">Annulla</a>
+                <a href="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'catalog:album_list' %}{% endif %}" class="btn btn-outline-secondary w-100 mt-2">Annulla</a>
             </form>
         </div>
     </div>
