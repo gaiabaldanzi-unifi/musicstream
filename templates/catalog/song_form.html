@@ -27,7 +27,7 @@
                     {% if form.artist.errors %}<div class="text-danger small">{{ form.artist.errors }}</div>{% endif %}
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3" id="album-section" style="display:none;">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <label class="form-label mb-0">{{ form.album.label }}</label>
                         <a href="{% url 'catalog:album_create' %}?next={{ request.path }}" class="small" style="color:var(--accent-start);">
@@ -43,7 +43,6 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <div class="form-text text-secondary small">Vengono mostrati solo gli album dell'artista selezionato.</div>
                     {% if form.album.errors %}<div class="text-danger small">{{ form.album.errors }}</div>{% endif %}
                 </div>
 
@@ -74,7 +73,10 @@
 
                 <div class="mb-3">
                     <label class="form-label">{{ form.cover.label }}</label>
-                    {{ form.cover }}
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="flex-grow-1">{{ form.cover }}</div>
+                        <button type="button" id="rimuovi-cover" class="btn btn-outline-secondary btn-sm" style="display:none;">Rimuovi</button>
+                    </div>
                     {% if form.cover.errors %}<div class="text-danger small">{{ form.cover.errors }}</div>{% endif %}
                 </div>
 
@@ -89,22 +91,50 @@
     (function () {
         var artist = document.getElementById('id_artist');
         var album = document.getElementById('id_album');
-        if (!artist || !album) return;
+        var albumSection = document.getElementById('album-section');
+        if (!artist || !album || !albumSection) return;
+
+        var tutteOpzioni = Array.from(album.options).map(function (opt) {
+            return {
+                value: opt.value,
+                artist: opt.dataset.artist || '',
+                text: opt.textContent.trim(),
+            };
+        });
 
         function filtraAlbum() {
             var artistaSelezionato = artist.value;
-            Array.from(album.options).forEach(function (opt) {
-                if (!opt.value) return;
-                var appartiene = (opt.dataset.artist === artistaSelezionato);
-                opt.hidden = !appartiene;
-                if (!appartiene && opt.selected) {
-                    album.value = '';
+            albumSection.style.display = artistaSelezionato ? '' : 'none';
+            var albumAttuale = album.value;
+            album.innerHTML = '';
+            tutteOpzioni.forEach(function (o) {
+                if (o.value === '' || o.artist === artistaSelezionato) {
+                    var opt = document.createElement('option');
+                    opt.value = o.value;
+                    opt.textContent = o.text;
+                    opt.setAttribute('data-artist', o.artist);
+                    if (o.value === albumAttuale) opt.selected = true;
+                    album.appendChild(opt);
                 }
             });
         }
 
         artist.addEventListener('change', filtraAlbum);
         filtraAlbum();
+    })();
+
+    (function () {
+        var cover = document.getElementById('id_cover');
+        var rimuovi = document.getElementById('rimuovi-cover');
+        if (!cover || !rimuovi) return;
+
+        cover.addEventListener('change', function () {
+            rimuovi.style.display = cover.value ? '' : 'none';
+        });
+        rimuovi.addEventListener('click', function () {
+            cover.value = '';
+            rimuovi.style.display = 'none';
+        });
     })();
 </script>
 {% endblock %}

@@ -28,7 +28,7 @@ L'interfaccia si adatta al ruolo. Il Curator, ad esempio, vede un pulsante **"Ag
 
 I dati inseriti vengono validati. Le principali validazioni sono:
 
-- nel modulo di aggiunta di una canzone il menu degli album mostra solo gli album dell'artista selezionato, così da evitare accostamenti incoerenti tra artista e album;
+- nel modulo di aggiunta di una canzone la scelta dell'album compare solo dopo aver selezionato l'artista e propone soltanto i suoi album; in ogni caso non è possibile salvare una canzone il cui album appartenga a un altro artista, così i dati restano sempre coerenti;
 - la durata di una canzone deve essere un numero compreso tra 1 e 3600 secondi (un'ora), altrimenti compare un messaggio di errore;
 - i campi obbligatori lasciati vuoti mostrano un errore in stile Django (non il messaggio predefinito del browser);
 - la registrazione applica le validazioni standard di Django: robustezza della password, coincidenza delle due password e unicità dello username.
