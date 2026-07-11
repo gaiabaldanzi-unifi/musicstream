@@ -335,6 +335,12 @@ def playlist_list(request):
 @login_required
 def playlist_detail(request, pk):
     playlist = get_object_or_404(Playlist, pk=pk, owner=request.user)
+    query = request.GET.get('aggiungi', '').strip()
+    search_results = []
+    if query:
+        search_results = Song.objects.filter(
+            Q(title__icontains=query) | Q(artist__name__icontains=query)
+        ).exclude(playlists=playlist).distinct()
     generi = playlist.songs.values_list('genre', flat=True)
     artisti = playlist.songs.values_list('artist', flat=True)
     if generi or artisti:
@@ -346,6 +352,8 @@ def playlist_detail(request, pk):
     return render(request, 'catalog/playlist_detail.html', {
         'playlist': playlist,
         'available_songs': songs,
+        'search_results': search_results,
+        'add_query': query,
     })
 
 @login_required
