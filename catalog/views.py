@@ -199,9 +199,13 @@ def album_list(request):
 def album_detail(request, pk):
     album = get_object_or_404(Album, pk=pk)
     songs = album.songs.order_by('title')
+    other_albums = []
+    if album.artist:
+        other_albums = album.artist.albums.exclude(pk=album.pk)
     return render(request, 'catalog/album_detail.html', {
         'album': album,
         'songs': songs,
+        'other_albums': other_albums,
     })
 
 @login_required

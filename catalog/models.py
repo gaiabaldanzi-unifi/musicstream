@@ -62,6 +62,13 @@ class Album(models.Model):
     def cover_gradient(self):
         return gradient_for(self.pk)
 
+    @property
+    def total_duration(self):
+        total = sum(song.duration for song in self.songs.all())
+        minutes = total // 60
+        seconds = total % 60
+        return f'{minutes}:{seconds:02d}'
+
     def __str__(self):
         return self.name
 

@@ -2,14 +2,28 @@
 {% block title %}{{ album.name }} — MusicStream{% endblock %}
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <p class="text-secondary mb-1 small">ALBUM</p>
-        <h2 class="fw-bold text-light mb-0">{{ album.name }}</h2>
-        {% if album.artist %}<p class="text-accent mt-1 mb-0">{{ album.artist }}</p>{% endif %}
-        <p class="text-secondary small mt-1">{{ songs.count }} canzon{% if songs.count == 1 %}e{% else %}i{% endif %}</p>
+<div class="row mb-4 align-items-center">
+    <div class="col-auto">
+        {% if album.cover %}
+            <img src="{{ album.cover.url }}" class="rounded" style="width:140px;height:140px;object-fit:cover;border:2px solid rgba(139,92,246,0.5);">
+        {% else %}
+            <div class="cover-placeholder rounded d-flex align-items-center justify-content-center" style="width:140px;height:140px;font-size:48px;background:{{ album.cover_gradient }};">
+                <i class="bi bi-disc-fill" style="color:#fff;font-size:inherit;"></i>
+            </div>
+        {% endif %}
     </div>
-    <div class="d-flex gap-2">
+    <div class="col">
+        <p class="text-secondary mb-1 small">ALBUM</p>
+        <h2 class="fw-bold text-light mb-1">{{ album.name }}</h2>
+        {% if album.artist %}
+            <p class="mb-1"><a href="{% url 'catalog:artist_detail' album.artist.pk %}" class="text-accent text-decoration-none fw-bold">{{ album.artist }}</a></p>
+        {% endif %}
+        <p class="text-secondary small mb-0">
+            {{ songs.count }} canzon{% if songs.count == 1 %}e{% else %}i{% endif %}
+            {% if songs.count %}· {{ album.total_duration }} min.{% endif %}
+        </p>
+    </div>
+    <div class="col-auto d-flex gap-2 align-self-start">
         {% if user.is_curator %}
             <a href="{% url 'catalog:album_update' album.pk %}" class="btn btn-outline-accent btn-sm">Modifica</a>
             <a href="{% url 'catalog:album_delete' album.pk %}" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Elimina</a>
@@ -39,5 +53,26 @@
     </a>
     {% endfor %}
 </div>
+
+{% if other_albums %}
+<h5 class="mt-5 mb-3 text-light">Altri album di {{ album.artist }}</h5>
+<div class="row row-cols-2 row-cols-md-6 g-3">
+    {% for other in other_albums %}
+    <div class="col">
+        <a href="{% url 'catalog:album_detail' other.pk %}" class="text-decoration-none">
+            <div class="card p-2 song-card h-100">
+                {% if other.cover %}
+                    <img src="{{ other.cover.url }}" class="rounded mb-2" style="width:100%;aspect-ratio:1;object-fit:cover;">
+                {% else %}
+                    <div class="cover-placeholder rounded mb-2 d-flex align-items-center justify-content-center" style="width:100%;aspect-ratio:1;font-size:32px;background:{{ other.cover_gradient }};"><i class="bi bi-disc-fill" style="color:#fff;font-size:inherit;"></i></div>
+                {% endif %}
+                <small class="fw-bold text-light text-truncate">{{ other.name }}</small>
+                <small class="text-secondary">{{ other.songs.count }} canzon{% if other.songs.count == 1 %}e{% else %}i{% endif %}</small>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 
 {% endblock %}

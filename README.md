@@ -22,7 +22,7 @@ MusicStream è un'applicazione web che permette di consultare un catalogo di can
 
 L'eliminazione di un artista o di un album rimuove anche le relative canzoni. I generi possono essere creati e modificati ma non eliminati.
 
-Il catalogo è interconnesso: dalla pagina di dettaglio di una canzone si può passare direttamente al suo artista, al suo album e al suo genere, e da lì esplorare gli altri contenuti collegati. L'applicazione propone inoltre canzoni consigliate in base al genere e all'artista, sia nella pagina di una canzone sia all'interno di una playlist.
+Il catalogo è interconnesso: dalla pagina di dettaglio di una canzone si può passare direttamente al suo artista, al suo album e al suo genere, e anche dalla pagina di un album si raggiunge il suo artista, così da esplorare gli altri contenuti collegati. L'applicazione propone inoltre contenuti consigliati in base al genere e all'artista: canzoni suggerite nella pagina di una canzone e all'interno di una playlist, e altri album dello stesso artista nella pagina di un album.
 
 L'interfaccia si adatta al ruolo. Il Curator, all'interno di ogni sezione (Canzoni, Artisti, Album, Generi), vede un pulsante per aggiungere un nuovo elemento di quel tipo; questi pulsanti non sono visibili al Listener. Inoltre, dal modulo di aggiunta di una canzone, il Curator può creare al momento un nuovo artista, album o genere nel caso non siano già presenti nel catalogo.
 

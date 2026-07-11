@@ -54,6 +54,8 @@ mile8            = Album.objects.create(name="8 Mile",                  artist=e
 hurry_up         = Album.objects.create(name="Hurry Up We're Dreaming", artist=m83)
 hot_fuss         = Album.objects.create(name="Hot Fuss",                artist=killers)
 fck_love         = Album.objects.create(name="F*CK LOVE 3",             artist=laroi)
+starboy          = Album.objects.create(name="Starboy",                 artist=weeknd)
+whatever         = Album.objects.create(name="Whatever People Say I Am", artist=arctic)
 
 print("Creazione utenti demo...")
 listener = CustomUser.objects.create_user(
@@ -100,6 +102,11 @@ songs_data = [
     ("R U Mine?",                                arctic,   am,               indie,       201),
     ("Why'd You Only Call Me When You're High?", arctic,   am,               indie,       202),
     ("Mr. Brightside",                           killers,  hot_fuss,         indie,       222),
+    ("Starboy",                                  weeknd,   starboy,          pop,         230),
+    ("I Feel It Coming",                         weeknd,   starboy,          pop,         269),
+    ("Die For You",                              weeknd,   starboy,          pop,         260),
+    ("I Bet You Look Good on the Dancefloor",    arctic,   whatever,         indie,       173),
+    ("When the Sun Goes Down",                   arctic,   whatever,         indie,       200),
 ]
 
 LYRICS_PLACEHOLDER = """Lorem ipsum dolor sit amet, consectetur adipiscing elit,

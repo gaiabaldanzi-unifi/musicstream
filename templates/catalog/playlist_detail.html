@@ -115,6 +115,7 @@
 
 {% endif %}
 
+{% if not request.GET.modifica %}
 <div class="mb-4">
     <h5 class="mb-3 text-light">Aggiungi canzoni</h5>
     <form class="no-ts row g-2 mb-3" method="get" action="{% url 'catalog:playlist_detail' playlist.pk %}">
@@ -128,15 +129,21 @@
     </form>
     {% if add_query %}
         {% if search_results %}
-        <div class="row row-cols-2 row-cols-md-4 g-2">
+        <div class="row row-cols-1 row-cols-md-2 g-2">
             {% for song in search_results %}
             <div class="col">
-                <div class="card p-2 song-card h-100">
-                    <small class="fw-bold text-light">{{ song.title }}</small>
-                    <small class="text-accent">{{ song.artist }}</small>
-                    <small class="text-secondary">{{ song.duration_display }}</small>
+                <div class="d-flex align-items-center justify-content-between gap-2 p-2 rounded"
+                     style="background: var(--bg-card); border: 1px solid var(--border-color);">
+                    <div class="d-flex align-items-center gap-2" style="min-width:0;">
+                        <div class="cover-placeholder rounded flex-shrink-0 d-flex align-items-center justify-content-center"
+                             style="width:36px;height:36px;font-size:16px;background:{{ song.cover_gradient }};"><i class="bi bi-soundwave" style="color:#fff;font-size:inherit;"></i></div>
+                        <div style="min-width:0;">
+                            <div class="text-light small fw-bold text-truncate">{{ song.title }}</div>
+                            <div class="text-accent text-truncate" style="font-size:0.75rem;">{{ song.artist }} · {{ song.duration_display }}</div>
+                        </div>
+                    </div>
                     <a href="{% url 'catalog:playlist_add_song' playlist.pk song.pk %}?next={{ request.get_full_path|urlencode }}"
-                       class="btn btn-gradient btn-sm mt-2">+ Aggiungi</a>
+                       class="btn btn-gradient btn-sm flex-shrink-0">+ Aggiungi</a>
                 </div>
             </div>
             {% endfor %}
@@ -162,6 +169,7 @@
     </div>
     {% endfor %}
 </div>
+{% endif %}
 {% endif %}
 
 {% endblock %}
